@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-hpa
+spec:
+  selector:
+    matchLabels:
+      run: node-hpa
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: node-hpa
+    spec:
+      containers:
+      - name: node-hpa
+        image: frknbrbr/node-hpa
+        ports:
+        - containerPort: 3000
+        resources:
+          limits:
+            cpu: 500m
+          requests:
+            cpu: 200m
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: node-hpa
+  labels:
+    run: node-hpa
+spec:
+  ports:
+  - port: 3000
+  selector:
+    run: node-hpa
